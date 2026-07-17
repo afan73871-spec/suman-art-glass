@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing - Suman Art Glass Admin</title>
+    <link rel="stylesheet" href="css/admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .bill-preview { background: white; border-radius: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid var(--border); padding: 2rem; margin-top: 1.5rem; }
+        .bill-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 2px solid var(--gold); }
+        .bill-logo h1 { font-size: 1.5rem; color: var(--dark); }
+        .bill-logo span { color: var(--gold); font-size: 0.65rem; letter-spacing: 3px; font-weight: 600; }
+        .bill-logo p { color: var(--gray); font-size: 0.8rem; margin-top: 0.5rem; line-height: 1.5; }
+        .bill-id { text-align: right; }
+        .bill-id h2 { color: var(--gold); font-size: 1.3rem; margin-bottom: 0.5rem; }
+        .bill-id p { color: var(--gray); font-size: 0.85rem; }
+        .bill-parties { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
+        .bill-party h4 { color: var(--gold); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem; }
+        .bill-party p { font-size: 0.9rem; color: var(--text-dark); line-height: 1.6; }
+        .bill-items-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+        .bill-items-table th { background: var(--dark-blue); color: white; padding: 0.75rem 1rem; text-align: left; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .bill-items-table th:last-child, .bill-items-table td:last-child { text-align: right; }
+        .bill-items-table td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+        .bill-items-table tr:hover { background: rgba(200,150,62,0.03); }
+        .bill-totals { display: flex; justify-content: flex-end; margin-bottom: 2rem; }
+        .bill-totals-box { width: 300px; }
+        .bill-totals-row { display: flex; justify-content: space-between; padding: 0.5rem 0; font-size: 0.9rem; }
+        .bill-totals-row.total { border-top: 2px solid var(--gold); margin-top: 0.5rem; padding-top: 0.75rem; font-weight: 700; font-size: 1.1rem; color: var(--gold); }
+        .bill-notes { padding: 1rem; background: var(--light-gray); border-radius: 8px; margin-bottom: 1.5rem; }
+        .bill-notes h4 { font-size: 0.8rem; color: var(--gray); margin-bottom: 0.5rem; }
+        .bill-notes p { font-size: 0.85rem; color: var(--text-dark); }
+        .bill-footer { text-align: center; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+        .bill-footer p { color: var(--gray); font-size: 0.8rem; }
+        .item-row { display: grid; grid-template-columns: 3fr 1fr 1fr 1fr auto; gap: 0.5rem; margin-bottom: 0.5rem; align-items: center; }
+        .item-row input, .item-row select { padding: 0.6rem 0.75rem; border: 2px solid var(--border); border-radius: 8px; font-size: 0.85rem; }
+        .remove-item { background: var(--danger); color: white; border: none; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 1rem; }
+        .add-item-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: var(--light-gray); border: 2px dashed var(--border); border-radius: 8px; cursor: pointer; color: var(--gold); font-weight: 600; font-size: 0.85rem; margin-bottom: 1.5rem; }
+        .add-item-btn:hover { border-color: var(--gold); background: rgba(200,150,62,0.05); }
+        .print-btn { background: linear-gradient(135deg, #1a1a2e, #0f1729); color: white; }
+        .print-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(26,26,46,0.3); }
+        @media print { .sidebar, .top-header, .no-print { display: none !important; } .main-content { margin-left: 0 !important; } .bill-preview { box-shadow: none; border: none; } }
+        .discount-row { display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem; }
+        .discount-row input { width: 100px; padding: 0.5rem; border: 2px solid var(--border); border-radius: 8px; font-size: 0.85rem; }
+        .tax-section { display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem; }
+        .tax-section label { font-size: 0.85rem; font-weight: 500; }
+        .tax-section input { width: 80px; padding: 0.5rem; border: 2px solid var(--border); border-radius: 8px; font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+    <div class="admin-layout">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <svg viewBox="0 0 50 50" fill="none"><rect x="5" y="12" width="15" height="32" stroke="#c8963e" stroke-width="2"/><rect x="24" y="6" width="18" height="38" stroke="#c8963e" stroke-width="2"/><rect x="10" y="18" width="5" height="5" fill="#c8963e"/><rect x="30" y="12" width="5" height="5" fill="#c8963e"/></svg>
+                <div><h1>SUMAN</h1><span>ART GLASS</span></div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="sidebar-section">MAIN MENU</div>
+                <a href="dashboard.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</a>
+                <div class="sidebar-section">CONTENT</div>
+                <a href="projects.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Projects</a>
+                <a href="services.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15 1.65 1.65 0 0 0 3 14V12a2 2 0 0 1 4 0v.09A1.65 1.65 0 0 0 8 13.6a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 14.6 15H15a2 2 0 0 1 4 0v.09A1.65 1.65 0 0 0 20 16.4z"/></svg>Services</a>
+                <a href="gallery.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Gallery</a>
+                <a href="clients.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Clients</a>
+                <a href="testimonials.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Testimonials</a>
+                <div class="sidebar-section">INQUIRIES</div>
+                <a href="contacts.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Contact Inquiries<span class="badge">3</span></a>
+                <div class="sidebar-section">OTHER</div>
+                <a href="billing.html" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Billing</a>
+                <a href="settings.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15 1.65 1.65 0 0 0 3 14V12a2 2 0 0 1 4 0v.09A1.65 1.65 0 0 0 8 13.6a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 14.6 15H15a2 2 0 0 1 4 0v.09A1.65 1.65 0 0 0 20 16.4z"/></svg>Settings</a>
+                <a href="#" onclick="handleLogout()" style="color: #ef4444;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Logout</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-header">
+                <h2>Billing & Invoices</h2>
+                <div class="top-header-right">
+                    <button class="btn btn-primary" onclick="createNewBill()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        New Invoice
+                    </button>
+                    <div class="user-profile">
+                        <img src="../images/team.jpg" alt="Admin">
+                        <span>Super Admin</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <!-- Tabs -->
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="showSection('create')">Create Invoice</button>
+                    <button class="tab-btn" onclick="showSection('history')">Invoice History</button>
+                </div>
+
+                <!-- Create Invoice Section -->
+                <div id="section-create">
+                    <div class="data-card">
+                        <div class="data-card-header">
+                            <h3>New Invoice</h3>
+                            <div style="display:flex;gap:0.5rem;">
+                                <button class="btn btn-secondary" onclick="previewBill()">Preview</button>
+                                <button class="btn btn-primary print-btn" onclick="printBill()">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                                    Print Invoice
+                                </button>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Invoice Info -->
+                            <div class="form-row" style="margin-bottom:1.5rem;">
+                                <div class="form-group">
+                                    <label>Invoice Number</label>
+                                    <input type="text" id="invoiceNo" value="INV-2026-001" readonly style="background:var(--light-gray);">
+                                </div>
+                                <div class="form-group">
+                                    <label>Invoice Date</label>
+                                    <input type="date" id="invoiceDate">
+                                </div>
+                            </div>
+                            <div class="form-row" style="margin-bottom:1.5rem;">
+                                <div class="form-group">
+                                    <label>Due Date</label>
+                                    <input type="date" id="dueDate">
+                                </div>
+                                <div class="form-group">
+                                    <label>Payment Status</label>
+                                    <select id="paymentStatus">
+                                        <option>Pending</option>
+                                        <option>Paid</option>
+                                        <option>Partial</option>
+                                        <option>Overdue</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Client Info -->
+                            <h4 style="margin-bottom:1rem;color:var(--gold);font-size:0.85rem;letter-spacing:1px;">BILL TO</h4>
+                            <div class="form-row" style="margin-bottom:1rem;">
+                                <div class="form-group">
+                                    <label>Client Name *</label>
+                                    <input type="text" id="clientName" placeholder="Enter client name">
+                                </div>
+                                <div class="form-group">
+                                    <label>Company</label>
+                                    <input type="text" id="clientCompany" placeholder="Company name">
+                                </div>
+                            </div>
+                            <div class="form-row" style="margin-bottom:1.5rem;">
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input type="email" id="clientEmail" placeholder="client@example.com">
+                                </div>
+                                <div class="form-group">
+                                    <label>Phone</label>
+                                    <input type="tel" id="clientPhone" placeholder="+91 XXXXX XXXXX">
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom:1.5rem;">
+                                <label>Address</label>
+                                <textarea id="clientAddress" rows="2" placeholder="Client address"></textarea>
+                            </div>
+
+                            <!-- Line Items -->
+                            <h4 style="margin-bottom:1rem;color:var(--gold);font-size:0.85rem;letter-spacing:1px;">LINE ITEMS</h4>
+                            <div class="item-row" style="margin-bottom:0.5rem;font-weight:600;font-size:0.8rem;color:var(--gray);">
+                                <span>Description</span>
+                                <span>Qty</span>
+                                <span>Unit Price</span>
+                                <span>Amount</span>
+                                <span></span>
+                            </div>
+                            <div id="lineItems">
+                                <div class="item-row">
+                                    <input type="text" class="item-desc" placeholder="Service/Glass description" value="Curtain Wall Glazing - Office Tower">
+                                    <input type="number" class="item-qty" placeholder="Qty" value="1" min="1" oninput="calculateItem(this)">
+                                    <input type="number" class="item-price" placeholder="Rate" value="250000" oninput="calculateItem(this)">
+                                    <input type="text" class="item-amount" value="₹2,50,000" readonly style="background:var(--light-gray);font-weight:600;">
+                                    <button class="remove-item" onclick="removeItem(this)">×</button>
+                                </div>
+                                <div class="item-row">
+                                    <input type="text" class="item-desc" placeholder="Service/Glass description" value="Spider Glazing - Entrance Facade">
+                                    <input type="number" class="item-qty" placeholder="Qty" value="2" min="1" oninput="calculateItem(this)">
+                                    <input type="number" class="item-price" placeholder="Rate" value="180000" oninput="calculateItem(this)">
+                                    <input type="text" class="item-amount" value="₹3,60,000" readonly style="background:var(--light-gray);font-weight:600;">
+                                    <button class="remove-item" onclick="removeItem(this)">×</button>
+                                </div>
+                                <div class="item-row">
+                                    <input type="text" class="item-desc" placeholder="Service/Glass description" value="UPVC Windows Installation">
+                                    <input type="number" class="item-qty" placeholder="Qty" value="10" min="1" oninput="calculateItem(this)">
+                                    <input type="number" class="item-price" placeholder="Rate" value="8500" oninput="calculateItem(this)">
+                                    <input type="text" class="item-amount" value="₹85,000" readonly style="background:var(--light-gray);font-weight:600;">
+                                    <button class="remove-item" onclick="removeItem(this)">×</button>
+                                </div>
+                            </div>
+                            <button class="add-item-btn" onclick="addItem()">+ Add Line Item</button>
+
+                            <!-- Discount & Tax -->
+                            <div style="display:flex;gap:2rem;margin-bottom:1.5rem;">
+                                <div class="discount-row">
+                                    <label style="font-size:0.85rem;font-weight:500;">Discount</label>
+                                    <input type="number" id="discountPercent" value="5" min="0" max="100" oninput="recalculate()">
+                                    <span style="font-size:0.85rem;color:var(--gray);">%</span>
+                                </div>
+                                <div class="tax-section">
+                                    <label>GST</label>
+                                    <input type="number" id="gstPercent" value="18" min="0" max="100" oninput="recalculate()">
+                                    <span style="font-size:0.85rem;color:var(--gray);">%</span>
+                                </div>
+                            </div>
+
+                            <!-- Totals -->
+                            <div class="bill-totals">
+                                <div class="bill-totals-box">
+                                    <div class="bill-totals-row"><span>Subtotal</span><span id="subtotal">₹6,95,000</span></div>
+                                    <div class="bill-totals-row"><span>Discount (5%)</span><span id="discountAmount" style="color:var(--success);">-₹34,750</span></div>
+                                    <div class="bill-totals-row"><span>GST (18%)</span><span id="gstAmount">₹1,17,765</span></div>
+                                    <div class="bill-totals-row total"><span>Total</span><span id="totalAmount">₹7,78,015</span></div>
+                                </div>
+                            </div>
+
+                            <!-- Notes -->
+                            <div class="form-group">
+                                <label>Notes / Terms</label>
+                                <textarea id="billNotes" rows="3" placeholder="Payment terms, bank details, notes...">Payment due within 30 days of invoice date. Bank Transfer to: Suman Art Glass, A/C No: 1234567890, IFSC: SBIN0012345, SBI, Lucknow Branch.</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Live Preview -->
+                    <div class="bill-preview" id="billPreview">
+                        <div class="bill-header">
+                            <div class="bill-logo">
+                                <h1>SUMAN ART GLASS</h1>
+                                <span>Premium Glass & Aluminium Solutions</span>
+                                <p>123 Glass Avenue, Industrial Area<br>Lucknow, UP 226001, India<br>+91 98765 43210 | info@sumanartglass.com</p>
+                            </div>
+                            <div class="bill-id">
+                                <h2>INVOICE</h2>
+                                <p><strong>Invoice #:</strong> INV-2026-001</p>
+                                <p><strong>Date:</strong> Jul 17, 2026</p>
+                                <p><strong>Due:</strong> Aug 16, 2026</p>
+                            </div>
+                        </div>
+
+                        <div class="bill-parties">
+                            <div class="bill-party">
+                                <h4>Bill To</h4>
+                                <p id="previewClient"><strong>Rajesh Kumar</strong><br>Infinix India Pvt Ltd<br>rajesh@infinix.com<br>+91 98765 43210<br>Hitech City, Hyderabad</p>
+                            </div>
+                            <div class="bill-party">
+                                <h4>Project Reference</h4>
+                                <p><strong>Infinix IT Park</strong><br>Curtain Wall & Spider Glazing Works<br>Commercial Complex, Hitech City</p>
+                            </div>
+                        </div>
+
+                        <table class="bill-items-table">
+                            <thead>
+                                <tr>
+                                    <th style="width:50%;">Description</th>
+                                    <th>Qty</th>
+                                    <th>Unit Price</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody id="previewItems">
+                                <tr><td>Curtain Wall Glazing - Office Tower</td><td>1</td><td>₹2,50,000</td><td>₹2,50,000</td></tr>
+                                <tr><td>Spider Glazing - Entrance Facade</td><td>2</td><td>₹1,80,000</td><td>₹3,60,000</td></tr>
+                                <tr><td>UPVC Windows Installation</td><td>10</td><td>₹8,500</td><td>₹85,000</td></tr>
+                            </tbody>
+                        </table>
+
+                        <div class="bill-totals">
+                            <div class="bill-totals-box">
+                                <div class="bill-totals-row"><span>Subtotal</span><span>₹6,95,000</span></div>
+                                <div class="bill-totals-row"><span>Discount (5%)</span><span style="color:var(--success);">-₹34,750</span></div>
+                                <div class="bill-totals-row"><span>GST (18%)</span><span>₹1,17,765</span></div>
+                                <div class="bill-totals-row total"><span>Total Amount</span><span>₹7,78,015</span></div>
+                            </div>
+                        </div>
+
+                        <div class="bill-notes">
+                            <h4>NOTES & TERMS</h4>
+                            <p>Payment due within 30 days of invoice date. Bank Transfer to: Suman Art Glass, A/C No: 1234567890, IFSC: SBIN0012345, SBI, Lucknow Branch.</p>
+                        </div>
+
+                        <div class="bill-footer">
+                            <p>Thank you for your business! | Suman Art Glass | www.sumanartglass.com</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Invoice History Section -->
+                <div id="section-history" style="display:none;">
+                    <div class="data-card">
+                        <div class="data-card-header">
+                            <h3>Invoice History</h3>
+                            <div class="search-box">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                                <input type="text" placeholder="Search invoices...">
+                            </div>
+                        </div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Invoice #</th>
+                                    <th>Client</th>
+                                    <th>Project</th>
+                                    <th>Amount</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>INV-2026-001</strong></td>
+                                    <td>Infinix India</td>
+                                    <td>Infinix IT Park</td>
+                                    <td><strong>₹7,78,015</strong></td>
+                                    <td>Jul 17, 2026</td>
+                                    <td><span class="badge badge-warning">Pending</span></td>
+                                    <td><button class="btn-icon" title="View"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button><button class="btn-icon" title="Print" onclick="printBill()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></button></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>INV-2026-002</strong></td>
+                                    <td>Radisson Hotels</td>
+                                    <td>Hotel Radisson Facade</td>
+                                    <td><strong>₹12,45,000</strong></td>
+                                    <td>Jul 10, 2026</td>
+                                    <td><span class="badge badge-success">Paid</span></td>
+                                    <td><button class="btn-icon" title="View"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button><button class="btn-icon" title="Print"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></button></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>INV-2026-003</strong></td>
+                                    <td>SGPGI Hospital</td>
+                                    <td>Hospital Wing C Glazing</td>
+                                    <td><strong>₹5,20,000</strong></td>
+                                    <td>Jun 28, 2026</td>
+                                    <td><span class="badge badge-success">Paid</span></td>
+                                    <td><button class="btn-icon" title="View"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button><button class="btn-icon" title="Print"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></button></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>INV-2026-004</strong></td>
+                                    <td>Toyota Showroom</td>
+                                    <td>Showroom Facade Renovation</td>
+                                    <td><strong>₹3,85,000</strong></td>
+                                    <td>Jun 15, 2026</td>
+                                    <td><span class="badge badge-danger">Overdue</span></td>
+                                    <td><button class="btn-icon" title="View"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button><button class="btn-icon" title="Print"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></button></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>INV-2026-005</strong></td>
+                                    <td>V-Mart Retail</td>
+                                    <td>Store Interior Glass Work</td>
+                                    <td><strong>₹1,92,000</strong></td>
+                                    <td>Jun 05, 2026</td>
+                                    <td><span class="badge badge-success">Paid</span></td>
+                                    <td><button class="btn-icon" title="View"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button><button class="btn-icon" title="Print"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        if (localStorage.getItem('adminLoggedIn') !== 'true') window.location.href = 'login.html';
+        function handleLogout() { localStorage.removeItem('adminLoggedIn'); window.location.href = 'login.html'; }
+
+        // Set today's date
+        document.getElementById('invoiceDate').valueAsDate = new Date();
+        let due = new Date(); due.setDate(due.getDate() + 30);
+        document.getElementById('dueDate').valueAsDate = due;
+
+        function showSection(s) {
+            document.getElementById('section-create').style.display = s === 'create' ? 'block' : 'none';
+            document.getElementById('section-history').style.display = s === 'history' ? 'block' : 'none';
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function formatINR(num) {
+            return '₹' + num.toLocaleString('en-IN');
+        }
+
+        function calculateItem(el) {
+            const row = el.closest('.item-row');
+            const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
+            const price = parseFloat(row.querySelector('.item-price').value) || 0;
+            row.querySelector('.item-amount').value = formatINR(qty * price);
+            recalculate();
+        }
+
+        function recalculate() {
+            let subtotal = 0;
+            document.querySelectorAll('.item-row').forEach(row => {
+                const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
+                const price = parseFloat(row.querySelector('.item-price').value) || 0;
+                subtotal += qty * price;
+            });
+            const disc = parseFloat(document.getElementById('discountPercent').value) || 0;
+            const gst = parseFloat(document.getElementById('gstPercent').value) || 0;
+            const discountAmt = subtotal * disc / 100;
+            const afterDiscount = subtotal - discountAmt;
+            const gstAmt = afterDiscount * gst / 100;
+            const total = afterDiscount + gstAmt;
+
+            document.getElementById('subtotal').textContent = formatINR(subtotal);
+            document.getElementById('discountAmount').textContent = '-' + formatINR(discountAmt);
+            document.getElementById('gstAmount').textContent = formatINR(gstAmt);
+            document.getElementById('totalAmount').textContent = formatINR(total);
+        }
+
+        function addItem() {
+            const container = document.getElementById('lineItems');
+            const div = document.createElement('div');
+            div.className = 'item-row';
+            div.innerHTML = '<input type="text" class="item-desc" placeholder="Service/Glass description"><input type="number" class="item-qty" placeholder="Qty" value="1" min="1" oninput="calculateItem(this)"><input type="number" class="item-price" placeholder="Rate" oninput="calculateItem(this)"><input type="text" class="item-amount" value="₹0" readonly style="background:var(--light-gray);font-weight:600;"><button class="remove-item" onclick="removeItem(this)">×</button>';
+            container.appendChild(div);
+        }
+
+        function removeItem(btn) {
+            const rows = document.querySelectorAll('.item-row');
+            if (rows.length > 1) { btn.closest('.item-row').remove(); recalculate(); }
+        }
+
+        function previewBill() {
+            document.getElementById('billPreview').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function printBill() {
+            window.print();
+        }
+
+        function createNewBill() {
+            showSection('create');
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-btn')[0].classList.add('active');
+        }
+    </script>
+</body>
+</html>
