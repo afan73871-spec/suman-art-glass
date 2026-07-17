@@ -62,7 +62,11 @@
             </ul>
         </nav>
         <a href="contact.html" class="btn btn-gold">Get a Quote →</a>
+        <div class="hamburger" onclick="toggleMobileNav()">
+            <span></span><span></span><span></span>
+        </div>
     </header>
+    <div class="mobile-nav-overlay" onclick="toggleMobileNav()"></div>
 
     <!-- Hero Section -->
     <section class="page-banner" style="background: url('images/hero.jpg') center/cover no-repeat;">
@@ -436,6 +440,14 @@
                 const stars = '★'.repeat(t.rating);
                 return `<div class="testimonial-card"><div class="stars">${stars}</div><p>"${t.text}"</p><div class="client-info"><img src="${t.photo}" alt="${t.name}"><div><strong>${t.name}</strong><span>${t.designation}</span></div></div></div>`;
             }).join('');
+        }
+    </script>
+    <script>
+        function toggleMobileNav() {
+            document.querySelector('nav').classList.toggle('active');
+            document.querySelector('.hamburger').classList.toggle('active');
+            document.querySelector('.mobile-nav-overlay').classList.toggle('active');
+            document.body.style.overflow = document.querySelector('nav').classList.contains('active') ? 'hidden' : '';
         }
     </script>
 </body>

@@ -62,7 +62,11 @@
             </ul>
         </nav>
         <a href="contact.html" class="btn btn-gold">Get a Quote →</a>
+        <div class="hamburger" onclick="toggleMobileNav()">
+            <span></span><span></span><span></span>
+        </div>
     </header>
+    <div class="mobile-nav-overlay" onclick="toggleMobileNav()"></div>
 
     <!-- Hero Section -->
     <section class="page-banner" style="background: url('images/hero.jpg') center/cover no-repeat;">
@@ -316,6 +320,13 @@
     </style>
 
     <script>
+        function toggleMobileNav() {
+            document.querySelector('nav').classList.toggle('active');
+            document.querySelector('.hamburger').classList.toggle('active');
+            document.querySelector('.mobile-nav-overlay').classList.toggle('active');
+            document.body.style.overflow = document.querySelector('nav').classList.contains('active') ? 'hidden' : '';
+        }
+        
         function handleSubmit(e) {
             e.preventDefault();
             document.getElementById('successModal').classList.add('active');
