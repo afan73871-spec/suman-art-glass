@@ -215,28 +215,25 @@ nav a:hover, nav a.active {
   min-height:88vh;
   display:flex;
   align-items:center;
-  background:linear-gradient(135deg, rgba(10,10,10,.85), rgba(15,23,41,.82));
+  background:linear-gradient(135deg, rgba(10,10,10,.92), rgba(15,23,41,.88));
   position:relative;
   overflow:hidden;
 }
 .page-banner::before {
   content:'';
   position:absolute;
-  top:-35%;
-  right:-12%;
-  width:550px;
-  height:550px;
-  background:radial-gradient(circle, rgba(200,150,62,.1), transparent 70%);
-  border-radius:50%;
+  inset:0;
+  background:linear-gradient(90deg, rgba(0,0,0,.7) 0%, rgba(0,0,0,.4) 50%, transparent 100%);
+  z-index:0;
 }
 .page-banner::after {
   content:'';
   position:absolute;
-  bottom:-25%;
-  left:-8%;
-  width:450px;
-  height:450px;
-  background:radial-gradient(circle, rgba(200,150,62,.07), transparent 70%);
+  top:-35%;
+  right:-12%;
+  width:550px;
+  height:550px;
+  background:radial-gradient(circle, rgba(200,150,62,.08), transparent 70%);
   border-radius:50%;
 }
 .page-banner-content {
@@ -251,7 +248,7 @@ nav a:hover, nav a.active {
   gap:.45rem;
   margin-bottom:1.75rem;
   font-size:.8rem;
-  color:rgba(255,255,255,.5);
+  color:rgba(255,255,255,.6);
 }
 .breadcrumb svg { width:14px; height:14px; }
 .breadcrumb a { color:var(--gold); }
@@ -262,14 +259,16 @@ nav a:hover, nav a.active {
   line-height:1.1;
   margin-bottom:1.2rem;
   letter-spacing:-.5px;
+  text-shadow:0 2px 20px rgba(0,0,0,.4);
 }
 .page-banner h1 span { color:var(--gold); }
 .page-banner p {
   font-size:1.02rem;
-  color:rgba(255,255,255,.6);
+  color:rgba(255,255,255,.7);
   margin-bottom:2rem;
   max-width:560px;
   line-height:1.85;
+  text-shadow:0 1px 10px rgba(0,0,0,.3);
 }
 .stats-row {
   display:flex;
