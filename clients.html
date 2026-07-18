@@ -426,6 +426,35 @@
 
     <script src="js/dataManager.js"></script>
     <script>
+        (function() {
+            try {
+                const b = DataManager.getPageBanners();
+                const s = DataManager.getSettings();
+                const key = 'clients';
+                const banner = b[key];
+                if (banner) {
+                    const h1 = document.querySelector('.page-banner h1');
+                    if (h1 && banner.title) h1.textContent = escapeHTML(banner.title);
+                    const subtitle = document.querySelector('.page-banner-content > p');
+                    if (subtitle && banner.subtitle) subtitle.textContent = escapeHTML(banner.subtitle);
+                }
+                if (s) {
+                    const addr = document.querySelector('.footer-contact li:nth-child(1) span');
+                    if (addr && s.address) addr.textContent = escapeHTML(s.address);
+                    const phone = document.querySelector('.footer-contact li:nth-child(2) span');
+                    if (phone && s.phone) phone.innerHTML = escapeHTML(s.phone);
+                    const email = document.querySelector('.footer-contact li:nth-child(3) span');
+                    if (email && s.email) email.textContent = escapeHTML(s.email);
+                    const socialLinks = document.querySelectorAll('.footer-social a');
+                    const socialKeys = ['facebook', 'instagram', 'linkedin', 'youtube'];
+                    if (s.social) socialLinks.forEach(function(a, i) {
+                        if (s.social[socialKeys[i]]) a.href = s.social[socialKeys[i]];
+                    });
+                }
+            } catch(e) {}
+        })();
+    </script>
+    <script>
         // Load clients dynamically
         const clientLogos = document.querySelector('.client-logos');
         if (clientLogos) {

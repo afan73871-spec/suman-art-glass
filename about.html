@@ -270,6 +270,34 @@
         </div>
     </section>
 
+    <!-- Mission & Vision -->
+    <section class="section" style="background: var(--light-gray);">
+        <div class="section-title">
+            <span>OUR PURPOSE</span>
+            <h2>Mission & <span>Vision</span></h2>
+        </div>
+        <div class="why-choose-grid">
+            <div class="why-choose-content">
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                        <div>
+                            <h4 id="about-mission-title">Our Mission</h4>
+                            <p id="about-mission-text">To transform spaces through innovative glass architecture that combines aesthetics, functionality, and sustainability.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        <div>
+                            <h4 id="about-vision-title">Our Vision</h4>
+                            <p id="about-vision-text">To be India's most trusted and innovative glass solutions company, setting new standards in quality and design.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- CTA Banner -->
     <section class="cta-banner">
         <div>
@@ -375,6 +403,26 @@
             document.querySelector('.hamburger').classList.toggle('active');
             document.querySelector('.mobile-nav-overlay').classList.toggle('active');
             document.body.style.overflow = document.querySelector('nav').classList.contains('active') ? 'hidden' : '';
+        }
+    </script>
+    <script src="js/dataManager.js"></script>
+    <script>
+        const s = DataManager.getSettings();
+        if (s.aboutTitle) {
+            const bannerH1 = document.querySelector('.page-banner h1');
+            if (bannerH1) bannerH1.innerHTML = escapeHTML(s.aboutTitle);
+        }
+        const storyH2 = document.querySelector('.story-content h2');
+        if (storyH2 && s.aboutTitle) storyH2.innerHTML = escapeHTML(s.aboutTitle);
+        const storyP = document.querySelector('.story-content p');
+        if (storyP && s.aboutText) storyP.textContent = s.aboutText;
+        if (s.aboutMission) {
+            const missionText = document.getElementById('about-mission-text');
+            if (missionText) missionText.textContent = s.aboutMission;
+        }
+        if (s.aboutVision) {
+            const visionText = document.getElementById('about-vision-text');
+            if (visionText) visionText.textContent = s.aboutVision;
         }
     </script>
 </body>

@@ -324,6 +324,61 @@
 
     <script src="js/dataManager.js"></script>
     <script>
+        // Load dynamic content from localStorage
+        (function() {
+            const settings = DataManager.getSettings();
+            const banners = DataManager.getPageBanners();
+
+            // Update page banner
+            const contactBanner = banners.contact;
+            if (contactBanner) {
+                const bannerH1 = document.querySelector('.page-banner h1');
+                if (bannerH1 && contactBanner.title) {
+                    bannerH1.innerHTML = contactBanner.title;
+                }
+                const bannerP = document.querySelector('.page-banner-content p');
+                if (bannerP && contactBanner.subtitle) {
+                    bannerP.textContent = contactBanner.subtitle;
+                }
+            }
+
+            // Update footer address
+            const footerAddress = document.querySelector('.footer-contact li:nth-child(1) span');
+            if (footerAddress && settings.address) {
+                footerAddress.textContent = settings.address;
+            }
+
+            // Update footer phone
+            const footerPhone = document.querySelector('.footer-contact li:nth-child(2) span');
+            if (footerPhone && settings.phone) {
+                footerPhone.innerHTML = escapeHTML(settings.phone) + (settings.phone2 ? '<br>' + escapeHTML(settings.phone2) : '');
+            }
+
+            // Update footer email
+            const footerEmail = document.querySelector('.footer-contact li:nth-child(3) span');
+            if (footerEmail && settings.email) {
+                footerEmail.textContent = settings.email;
+            }
+
+            // Update social links in footer
+            const socialLinks = document.querySelectorAll('.footer-social a');
+            const socialUrls = [settings.facebook, settings.instagram, settings.linkedin, settings.youtube];
+            socialLinks.forEach(function(link, i) {
+                if (socialUrls[i]) {
+                    link.href = socialUrls[i];
+                }
+            });
+
+            // Update social links in top bar
+            const topBarSocialLinks = document.querySelectorAll('.top-bar-right a');
+            topBarSocialLinks.forEach(function(link, i) {
+                if (socialUrls[i]) {
+                    link.href = socialUrls[i];
+                }
+            });
+        })();
+    </script>
+    <script>
         // Rate limiting: 1 submission per 60 seconds
         let lastSubmission = parseInt(localStorage.getItem('sag_last_submission') || '0');
         

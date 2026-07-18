@@ -114,13 +114,70 @@ const DataManager = {
                 companyName: 'Suman Art Glass',
                 tagline: 'Transforming Spaces with Premium Glass Solutions',
                 phone: '+91 98765 43210',
-                email: 'info@sumanartglass.com',
-                address: '123 Glass Avenue, Industrial Area, Lucknow, UP 226001, India',
-                workingHours: 'Mon - Sat: 9:00 AM - 6:00 PM',
+                phone2: '+91 9839074841',
+                email: 'sumanartglasses@gmail.com',
+                address: 'B/5, Upper Ground Floor, Yadu Nath Sanyal Road, Lucknow - 226001',
+                workingHours: 'Mon - Sat: 9:30 AM - 7:00 PM',
                 facebook: 'https://facebook.com/sumanartglass',
                 instagram: 'https://instagram.com/sumanartglass',
                 linkedin: 'https://linkedin.com/company/sumanartglass',
-                whatsapp: '+919876543210'
+                whatsapp: '+919876543210',
+                // Hero Section
+                heroTitle: 'Innovative Glass Solutions, Crafted for <span>Iconic Spaces</span>',
+                heroSubtitle: 'India\'s leading specialist in curtain wall glazing, spider glazing, structural glazing, and premium glass architecture for commercial, hospitality, and institutional projects.',
+                heroImage: 'images/hero.jpg',
+                // Stats Section
+                stat1Number: '200+',
+                stat1Label: 'Projects Completed',
+                stat2Number: '150+',
+                stat2Label: 'Happy Clients',
+                stat3Number: '15+',
+                stat3Label: 'Years Experience',
+                stat4Number: '98%',
+                stat4Label: 'Client Satisfaction',
+                // Why Choose Us
+                whyTitle: 'Why Choose <span>Suman Art Glass</span>?',
+                whySubtitle: 'We deliver excellence with every project',
+                why1Title: 'Premium Quality',
+                why1Desc: 'We use only the finest materials and cutting-edge technology to deliver glass solutions that stand the test of time.',
+                why2Title: 'Expert Team',
+                why2Desc: 'Our team of skilled professionals brings decades of experience to every project, ensuring flawless execution.',
+                why3Title: 'Timely Delivery',
+                why3Desc: 'We understand the importance of deadlines and are committed to completing every project on schedule.',
+                why4Title: 'Custom Solutions',
+                why4Desc: 'Every space is unique. We provide tailored glass solutions that match your specific requirements and vision.',
+                // CTA Section
+                ctaTitle: 'Ready to Transform Your Space?',
+                ctaSubtitle: 'Get a free consultation and quote for your next project',
+                ctaButtonText: 'Get Free Quote',
+                // About Page
+                aboutTitle: 'Crafting Excellence in Glass Since 2009',
+                aboutText: 'Suman Art Glass is a leading provider of premium glass solutions in India. With over 15 years of experience, we have completed 200+ projects across commercial, hospitality, healthcare, and institutional sectors. Our commitment to quality, innovation, and customer satisfaction has made us the trusted partner for architects, builders, and property owners.',
+                aboutMission: 'To transform spaces through innovative glass architecture that combines aesthetics, functionality, and sustainability.',
+                aboutVision: 'To be India\'s most trusted and innovative glass solutions company, setting new standards in quality and design.',
+                // Process Section
+                processTitle: 'Our <span>Process</span>',
+                processSubtitle: 'From concept to completion, we ensure perfection at every step',
+                process1Title: 'Consultation',
+                process1Desc: 'We understand your requirements and vision',
+                process2Title: 'Design',
+                process2Desc: 'Our experts create customized solutions',
+                process3Title: 'Installation',
+                process3Desc: 'Professional installation by skilled team',
+                process4Title: 'Support',
+                process4Desc: 'Ongoing maintenance and warranty support'
+            }));
+        }
+
+        // Hero banners for other pages
+        if (!localStorage.getItem('sag_page_banners')) {
+            localStorage.setItem('sag_page_banners', JSON.stringify({
+                about: { title: 'About <span>Suman Art Glass</span>', subtitle: 'Building Trust Through Quality Since 2009' },
+                services: { title: 'Our <span>Services</span>', subtitle: 'Comprehensive Glass Solutions for Every Need' },
+                projects: { title: 'Our <span>Projects</span>', subtitle: 'Showcasing Our Excellence Across Industries' },
+                ourwork: { title: 'Our <span>Work</span>', subtitle: 'A Gallery of Our Finest Installations' },
+                clients: { title: 'Our <span>Clients</span>', subtitle: 'Trusted by Leading Brands Across India' },
+                contact: { title: 'Contact <span>Us</span>', subtitle: 'Get in Touch for Your Next Project' }
             }));
         }
     },
@@ -210,7 +267,11 @@ const DataManager = {
     },
 
     getSettings() { return JSON.parse(localStorage.getItem('sag_settings') || '{}'); },
-    updateSettings(settings) { localStorage.setItem('sag_settings', JSON.stringify(settings)); }
+    updateSettings(settings) { localStorage.setItem('sag_settings', JSON.stringify(settings)); },
+    
+    // Page banners
+    getPageBanners() { return JSON.parse(localStorage.getItem('sag_page_banners') || '{}'); },
+    updatePageBanners(banners) { localStorage.setItem('sag_page_banners', JSON.stringify(banners)); }
 };
 
 // Auto-initialize

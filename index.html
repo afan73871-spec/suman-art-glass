@@ -471,14 +471,76 @@
 
     <script src="js/dataManager.js"></script>
     <script>
+        // Load all dynamic content from localStorage
+        const s = DataManager.getSettings();
+        
+        // Hero Section
+        if (s.heroTitle) {
+            const heroH1 = document.querySelector('.page-banner h1');
+            if (heroH1) heroH1.innerHTML = s.heroTitle;
+        }
+        if (s.heroSubtitle) {
+            const heroP = document.querySelector('.page-banner p');
+            if (heroP) heroP.textContent = s.heroSubtitle;
+        }
+        if (s.heroImage) {
+            const heroSection = document.querySelector('.page-banner');
+            if (heroSection) heroSection.style.background = `url('${s.heroImage}') center/cover no-repeat`;
+        }
+        
+        // Stats Section
+        const statNums = document.querySelectorAll('.stats-row .stat-item strong');
+        const statLabels = document.querySelectorAll('.stats-row .stat-item span');
+        if (statNums.length >= 4) {
+            statNums[0].textContent = s.stat3Number || '15+';
+            statNums[1].textContent = s.stat1Number || '200+';
+            statNums[2].textContent = s.stat2Number || '150+';
+            statNums[3].textContent = s.stat4Number || '98%';
+            statLabels[0].textContent = s.stat3Label || 'Years Experience';
+            statLabels[1].textContent = s.stat1Label || 'Projects Completed';
+            statLabels[2].textContent = s.stat2Label || 'Happy Clients';
+            statLabels[3].textContent = s.stat4Label || 'Client Satisfaction';
+        }
+
+        // CTA Section
+        if (s.ctaTitle) {
+            const ctaH3 = document.querySelector('.cta-banner h3');
+            if (ctaH3) ctaH3.textContent = s.ctaTitle;
+        }
+        if (s.ctaSubtitle) {
+            const ctaP = document.querySelector('.cta-banner p');
+            if (ctaP) ctaP.textContent = s.ctaSubtitle;
+        }
+        if (s.ctaButtonText) {
+            const ctaBtn = document.querySelector('.cta-banner .btn');
+            if (ctaBtn) ctaBtn.textContent = s.ctaButtonText + ' →';
+        }
+
+        // Footer - Company Info
+        const footerAddress = document.querySelector('.footer-content li:first-child span');
+        const footerPhone = document.querySelector('.footer-content li:nth-child(2) span');
+        const footerEmail = document.querySelector('.footer-content li:nth-child(3) span');
+        if (s.address && footerAddress) footerAddress.textContent = s.address;
+        if (s.phone && footerPhone) footerPhone.textContent = s.phone;
+        if (s.email && footerEmail) footerEmail.textContent = s.email;
+
+        // Social Links
+        const socialLinks = document.querySelectorAll('.footer-social a');
+        if (socialLinks.length >= 4) {
+            if (s.facebook) socialLinks[0].href = s.facebook;
+            if (s.instagram) socialLinks[1].href = s.instagram;
+            if (s.linkedin) socialLinks[2].href = s.linkedin;
+            if (s.whatsapp) socialLinks[3].href = 'https://wa.me/' + s.whatsapp.replace(/[^0-9]/g, '');
+        }
+
         // Load services dynamically
         const servicesGrid = document.querySelector('.services-grid');
         if (servicesGrid) {
             const services = DataManager.getAll('services');
-            servicesGrid.innerHTML = services.slice(0, 10).map(s => {
+            servicesGrid.innerHTML = services.slice(0, 10).map(sv => {
                 const imgMap = {'curtain-wall':'curtain-wall.jpg','spider-glazing':'spider-glazing.jpg','upvc-windows':'upvc-windows.jpg','aluminium-partition':'glass-partition.jpg','facade-systems':'modern-building.jpg','glass-railing':'toughened-glass.jpg','toughened-glass':'toughened-glass.jpg','digital-printing':'digital-printing.jpg','metal-cladding':'metal-cladding.jpg','aluminium-windows':'aluminum-windows.jpg','glass-art':'glass-art.jpg','structural-glazing':'curtain-wall.jpg'};
-                const img = imgMap[s.icon] || 'curtain-wall.jpg';
-                return `<div class="service-card"><img src="images/${escapeHTML(img)}" alt="${escapeHTML(s.name)}"><h3>${escapeHTML(s.name)}</h3><a href="services.html" class="view-link">View Details →</a></div>`;
+                const img = imgMap[sv.icon] || 'curtain-wall.jpg';
+                return `<div class="service-card"><img src="images/${escapeHTML(img)}" alt="${escapeHTML(sv.name)}"><h3>${escapeHTML(sv.name)}</h3><a href="services.html" class="view-link">View Details →</a></div>`;
             }).join('');
         }
 

@@ -478,5 +478,38 @@
             document.body.style.overflow = document.querySelector('nav').classList.contains('active') ? 'hidden' : '';
         }
     </script>
+    <script>
+        (function() {
+            var pageBanners = DataManager.getPageBanners();
+            var settings = DataManager.getSettings();
+
+            var servicesBanner = pageBanners.find(function(b) { return b.page === 'services'; });
+            if (servicesBanner) {
+                var titleEl = document.querySelector('.page-banner h1');
+                if (titleEl && servicesBanner.title) {
+                    titleEl.innerHTML = escapeHTML(servicesBanner.title);
+                }
+                var subtitleEl = document.querySelector('.page-banner .page-banner-content p');
+                if (subtitleEl && servicesBanner.subtitle) {
+                    subtitleEl.innerHTML = escapeHTML(servicesBanner.subtitle);
+                }
+            }
+
+            if (settings) {
+                var addressEl = document.querySelector('.footer-contact li:nth-child(1) span');
+                if (addressEl && settings.address) {
+                    addressEl.innerHTML = escapeHTML(settings.address);
+                }
+                var phoneEl = document.querySelector('.footer-contact li:nth-child(2) span');
+                if (phoneEl && settings.phone) {
+                    phoneEl.innerHTML = escapeHTML(settings.phone);
+                }
+                var emailEl = document.querySelector('.footer-contact li:nth-child(3) span');
+                if (emailEl && settings.email) {
+                    emailEl.innerHTML = escapeHTML(settings.email);
+                }
+            }
+        })();
+    </script>
 </body>
 </html>
