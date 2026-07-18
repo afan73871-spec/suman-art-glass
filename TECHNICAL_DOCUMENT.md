@@ -535,18 +535,7 @@ website/
 
 ---
 
-## 16. Deployment Options
-
-| Option | Difficulty | Cost |
-|--------|-----------|------|
-| **Vercel** (Recommended) | Easy - connect GitHub repo | Free tier available |
-| **Netlify** | Easy - drag & drop | Free tier available |
-| **GitHub Pages** | Easy - enable in repo settings | Free |
-| **Traditional Hosting** | Medium - upload via FTP | Varies |
-
----
-
-## 17. Maintenance Guide
+## 16. Maintenance Guide
 
 ### To Update Content:
 1. Login to admin panel at `admin/login.html`
