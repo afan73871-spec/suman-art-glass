@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     <title>Services - Suman Art Glass</title>
     <link rel="stylesheet" href="css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
@@ -446,7 +449,7 @@
             const imgMap = {'glass':'toughened-glass.jpg','aluminium':'aluminum-windows.jpg','upvc':'upvc-windows.jpg','facade':'curtain-wall.jpg','specialty':'glass-art.jpg'};
             servicesGrid.innerHTML = services.map(s => {
                 const img = imgMap[s.category] || 'curtain-wall.jpg';
-                return `<div class="service-full-card" data-category="${s.category}"><img src="images/${img}" alt="${s.name}"><div class="service-content"><div class="icon-row"><h3>${s.name}</h3></div><p>${s.description || 'Premium quality service.'}</p><a href="contact.html" class="view-link">View Details →</a></div></div>`;
+                return `<div class="service-full-card" data-category="${escapeHTML(s.category)}"><img src="images/${escapeHTML(img)}" alt="${escapeHTML(s.name)}"><div class="service-content"><div class="icon-row"><h3>${escapeHTML(s.name)}</h3></div><p>${escapeHTML(s.description) || 'Premium quality service.'}</p><a href="contact.html" class="view-link">View Details →</a></div></div>`;
             }).join('');
         }
 

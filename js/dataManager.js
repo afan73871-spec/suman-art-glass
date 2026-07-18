@@ -1,4 +1,11 @@
 // Data Manager - localStorage CRUD for Suman Art Glass
+// Security: Global escapeHTML function for XSS prevention
+function escapeHTML(str) {
+    if (!str) return '';
+    const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;', '/': '&#x2F;' };
+    return String(str).replace(/[&<>"'/]/g, function(s) { return map[s]; });
+}
+
 const DataManager = {
     MAX_IMAGE_SIZE: 500000, // 500KB max for localStorage
 

@@ -1,5 +1,48 @@
 // Admin Panel JavaScript - Full CRUD with base64 image support
 
+// Security: Global escapeHTML function for XSS prevention
+function escapeHTML(str) {
+    if (!str) return '';
+    const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;', '/': '&#x2F;' };
+    return String(str).replace(/[&<>"'/]/g, function(s) { return map[s]; });
+}
+
+// Security: Session timeout (30 minutes)
+const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutes
+let sessionTimer = null;
+
+function resetSessionTimer() {
+    if (sessionTimer) clearTimeout(sessionTimer);
+    sessionTimer = setTimeout(function() {
+        localStorage.removeItem('adminLoggedIn');
+        localStorage.removeItem('adminEmail');
+        alert('Session expired. Please login again.');
+        window.location.href = 'login.html';
+    }, SESSION_TIMEOUT);
+    localStorage.setItem('sag_session_last_active', Date.now().toString());
+}
+
+function checkSessionTimeout() {
+    const lastActive = parseInt(localStorage.getItem('sag_session_last_active') || '0');
+    if (lastActive && Date.now() - lastActive > SESSION_TIMEOUT) {
+        localStorage.removeItem('adminLoggedIn');
+        localStorage.removeItem('adminEmail');
+        window.location.href = 'login.html';
+        return false;
+    }
+    resetSessionTimer();
+    return true;
+}
+
+// Reset timer on user activity
+['click', 'keypress', 'mousemove', 'scroll'].forEach(function(event) {
+    document.addEventListener(event, function() {
+        if (localStorage.getItem('adminLoggedIn') === 'true') {
+            resetSessionTimer();
+        }
+    });
+});
+
 // Security: Input sanitization function
 function sanitizeInput(str) {
     if (!str) return '';
@@ -24,7 +67,9 @@ function sanitizeFormData(data) {
 function checkAuth() {
     if (localStorage.getItem('adminLoggedIn') !== 'true') {
         window.location.href = 'login.html';
+        return;
     }
+    checkSessionTimeout();
 }
 
 function handleLogout() {

@@ -107,17 +107,17 @@
             const contacts = DataManager.getAll('contacts');
             document.getElementById('contactCount').textContent = contacts.length;
             document.getElementById('contactsBody').innerHTML = contacts.map(c => `
-                <tr data-id="${c.id}">
+                <tr data-id="${escapeHTML(c.id)}">
                     <td><input type="checkbox"></td>
-                    <td><strong>${c.name}</strong></td>
-                    <td>${c.email}</td>
-                    <td>${c.phone}</td>
-                    <td>${c.service}</td>
-                    <td><span class="badge ${c.status === 'new' ? 'badge-danger' : c.status === 'read' ? 'badge-warning' : 'badge-success'}">${c.status}</span></td>
-                    <td>${c.date}</td>
+                    <td><strong>${escapeHTML(c.name)}</strong></td>
+                    <td>${escapeHTML(c.email)}</td>
+                    <td>${escapeHTML(c.phone)}</td>
+                    <td>${escapeHTML(c.service)}</td>
+                    <td><span class="badge ${c.status === 'new' ? 'badge-danger' : c.status === 'read' ? 'badge-warning' : 'badge-success'}">${escapeHTML(c.status)}</span></td>
+                    <td>${escapeHTML(c.date)}</td>
                     <td>
-                        <button class="btn-icon" title="View" onclick="viewContact(${c.id})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
-                        <button class="btn-icon" title="Delete" onclick="deleteContact(${c.id})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+                        <button class="btn-icon" title="View" onclick="viewContact(${parseInt(c.id) || 0})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                        <button class="btn-icon" title="Delete" onclick="deleteContact(${parseInt(c.id) || 0})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
                     </td>
                 </tr>
             `).join('');

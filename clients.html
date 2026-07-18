@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     <title>Clients - Suman Art Glass</title>
     <link rel="stylesheet" href="css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
@@ -428,7 +431,7 @@
         if (clientLogos) {
             const clients = DataManager.getAll('clients');
             clientLogos.innerHTML = clients.map(c => 
-                `<div class="client-logo"><img src="${c.logo}" alt="${c.name}"><span>${c.name}</span></div>`
+                `<div class="client-logo"><img src="${escapeHTML(c.logo)}" alt="${escapeHTML(c.name)}"><span>${escapeHTML(c.name)}</span></div>`
             ).join('');
         }
 
@@ -437,8 +440,8 @@
         if (testimonialsGrid) {
             const testimonials = DataManager.getAll('testimonials');
             testimonialsGrid.innerHTML = testimonials.map(t => {
-                const stars = '★'.repeat(t.rating);
-                return `<div class="testimonial-card"><div class="stars">${stars}</div><p>"${t.text}"</p><div class="client-info"><img src="${t.photo}" alt="${t.name}"><div><strong>${t.name}</strong><span>${t.designation}</span></div></div></div>`;
+                const stars = '★'.repeat(Math.min(5, Math.max(0, parseInt(t.rating) || 0)));
+                return `<div class="testimonial-card"><div class="stars">${stars}</div><p>"${escapeHTML(t.text)}"</p><div class="client-info"><img src="${escapeHTML(t.photo)}" alt="${escapeHTML(t.name)}"><div><strong>${escapeHTML(t.name)}</strong><span>${escapeHTML(t.designation)}</span></div></div></div>`;
             }).join('');
         }
     </script>

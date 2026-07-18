@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     <title>Projects - Suman Art Glass</title>
     <link rel="stylesheet" href="css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
@@ -415,7 +418,9 @@
             const brandColors = {Infinix:'#1a73e8',Radisson:'#b8860b',SGPGI:'#dc3545',Toyota:'#e31e24',CMS:'#28a745','V-Mart':'#e31e24',Omaxe:'#ff9800',LDA:'#6f42c1'};
             projectsGrid.innerHTML = projects.map(p => {
                 const color = brandColors[p.company] || '#c8963e';
-                return `<div class="project-full-card" data-category="${p.category}"><span class="category-tag">${p.category.charAt(0).toUpperCase()+p.category.slice(1)}</span><img src="${p.image}" alt="${p.name}"><div class="company-logo-badge"><svg viewBox="0 0 80 30"><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="10" fill="${color}">${(p.company||'').toUpperCase()}</text></svg></div><div class="project-info"><h3>${p.name}</h3><div class="location"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${p.location}</div><p>${p.description || ''}</p><a href="our-work.html" class="view-link">View Project →</a></div></div>`;
+                const catText = (p.category || '').charAt(0).toUpperCase() + (p.category || '').slice(1);
+                const companyText = (p.company || '').toUpperCase();
+                return `<div class="project-full-card" data-category="${escapeHTML(p.category)}"><span class="category-tag">${escapeHTML(catText)}</span><img src="${escapeHTML(p.image)}" alt="${escapeHTML(p.name)}"><div class="company-logo-badge"><svg viewBox="0 0 80 30"><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="10" fill="${escapeHTML(color)}">${escapeHTML(companyText)}</text></svg></div><div class="project-info"><h3>${escapeHTML(p.name)}</h3><div class="location"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${escapeHTML(p.location)}</div><p>${escapeHTML(p.description) || ''}</p><a href="our-work.html" class="view-link">View Project →</a></div></div>`;
             }).join('');
         }
 

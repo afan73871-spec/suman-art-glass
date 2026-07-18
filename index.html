@@ -478,7 +478,7 @@
             servicesGrid.innerHTML = services.slice(0, 10).map(s => {
                 const imgMap = {'curtain-wall':'curtain-wall.jpg','spider-glazing':'spider-glazing.jpg','upvc-windows':'upvc-windows.jpg','aluminium-partition':'glass-partition.jpg','facade-systems':'modern-building.jpg','glass-railing':'toughened-glass.jpg','toughened-glass':'toughened-glass.jpg','digital-printing':'digital-printing.jpg','metal-cladding':'metal-cladding.jpg','aluminium-windows':'aluminum-windows.jpg','glass-art':'glass-art.jpg','structural-glazing':'curtain-wall.jpg'};
                 const img = imgMap[s.icon] || 'curtain-wall.jpg';
-                return `<div class="service-card"><img src="images/${img}" alt="${s.name}"><h3>${s.name}</h3><a href="services.html" class="view-link">View Details →</a></div>`;
+                return `<div class="service-card"><img src="images/${escapeHTML(img)}" alt="${escapeHTML(s.name)}"><h3>${escapeHTML(s.name)}</h3><a href="services.html" class="view-link">View Details →</a></div>`;
             }).join('');
         }
 
@@ -494,7 +494,7 @@
             const catLabels = {hospitality:'Hotels',healthcare:'Hospitals',institutional:'Schools',commercial:'Commercial',automobile:'Automobiles',residential:'Housing Projects',retail:'Retail',government:'Government'};
             const catImgs = {hospitality:'hotel.jpg',healthcare:'hospital.jpg',institutional:'school.jpg',commercial:'commercial.jpg',automobile:'automobile.jpg',residential:'housing.jpg',retail:'commercial.jpg',government:'modern-building.jpg'};
             projectsGrid.innerHTML = Object.keys(cats).map(c => 
-                `<div class="project-card"><img src="images/${catImgs[c]||'commercial.jpg'}" alt="${catLabels[c]||c}"><div class="project-overlay"><h3>${catLabels[c]||c}</h3><span>${cats[c].count}+ Projects</span></div></div>`
+                `<div class="project-card"><img src="images/${escapeHTML(catImgs[c]||'commercial.jpg')}" alt="${escapeHTML(catLabels[c]||c)}"><div class="project-overlay"><h3>${escapeHTML(catLabels[c]||c)}</h3><span>${escapeHTML(cats[c].count)}+ Projects</span></div></div>`
             ).join('');
         }
 
@@ -503,8 +503,8 @@
         if (testimonialsGrid) {
             const testimonials = DataManager.getAll('testimonials');
             testimonialsGrid.innerHTML = testimonials.map(t => {
-                const stars = '★'.repeat(t.rating);
-                return `<div class="testimonial-card"><div class="stars">${stars}</div><p>"${t.text}"</p><div class="testimonial-author"><img src="${t.photo}" alt="${t.name}"><div><strong>${t.name}</strong><span>${t.designation}</span></div></div></div>`;
+                const stars = '★'.repeat(Math.min(5, Math.max(0, parseInt(t.rating) || 0)));
+                return `<div class="testimonial-card"><div class="stars">${stars}</div><p>"${escapeHTML(t.text)}"</p><div class="testimonial-author"><img src="${escapeHTML(t.photo)}" alt="${escapeHTML(t.name)}"><div><strong>${escapeHTML(t.name)}</strong><span>${escapeHTML(t.designation)}</span></div></div></div>`;
             }).join('');
         }
 
@@ -513,7 +513,7 @@
         if (clientsGrid) {
             const clients = DataManager.getAll('clients');
             clientsGrid.innerHTML = clients.map(c => 
-                `<div class="client-item"><img src="${c.logo}" alt="${c.name}"><p>${c.name}</p></div>`
+                `<div class="client-item"><img src="${escapeHTML(c.logo)}" alt="${escapeHTML(c.name)}"><p>${escapeHTML(c.name)}</p></div>`
             ).join('');
         }
     </script>
