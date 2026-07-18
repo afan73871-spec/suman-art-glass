@@ -1,5 +1,26 @@
 // Admin Panel JavaScript - Full CRUD with base64 image support
 
+// Security: Input sanitization function
+function sanitizeInput(str) {
+    if (!str) return '';
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+}
+
+// Security: Sanitize all form inputs before save
+function sanitizeFormData(data) {
+    const sanitized = {};
+    for (const [key, value] of Object.entries(data)) {
+        if (typeof value === 'string') {
+            sanitized[key] = sanitizeInput(value);
+        } else {
+            sanitized[key] = value;
+        }
+    }
+    return sanitized;
+}
+
 function checkAuth() {
     if (localStorage.getItem('adminLoggedIn') !== 'true') {
         window.location.href = 'login.html';
@@ -129,7 +150,7 @@ async function saveProject() {
         if (existing) image = existing.image;
     }
 
-    const data = { name, category, location, description, status, company, image };
+    const data = sanitizeFormData({ name, category, location, description, status, company, image });
 
     if (editId) {
         DataManager.update('projects', editId, data);
@@ -166,7 +187,7 @@ function saveService() {
 
     const modal = document.getElementById('serviceModal');
     const editId = modal?.dataset.editId ? parseInt(modal.dataset.editId) : null;
-    const data = { name, category, description, icon: category };
+    const data = sanitizeFormData({ name, category, description, icon: category });
 
     if (editId) {
         DataManager.update('services', editId, data);

@@ -2,6 +2,28 @@
 const DataManager = {
     MAX_IMAGE_SIZE: 500000, // 500KB max for localStorage
 
+    // Security: Sanitize string input
+    sanitize(str) {
+        if (typeof str !== 'string') return str;
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    },
+
+    // Security: Sanitize all string values in an object
+    sanitizeObject(obj) {
+        if (!obj || typeof obj !== 'object') return obj;
+        const sanitized = {};
+        for (const [key, value] of Object.entries(obj)) {
+            if (typeof value === 'string' && key !== 'image' && key !== 'logo' && key !== 'photo') {
+                sanitized[key] = this.sanitize(value);
+            } else {
+                sanitized[key] = value;
+            }
+        }
+        return sanitized;
+    },
+
     init() {
         if (!localStorage.getItem('sag_projects')) {
             localStorage.setItem('sag_projects', JSON.stringify([
@@ -119,6 +141,9 @@ const DataManager = {
     getById(key, id) { return this.getAll(key).find(item => item.id === id); },
     
     async add(key, item) {
+        // Security: Sanitize input before storage
+        item = this.sanitizeObject(item);
+        
         const items = this.getAll(key);
         item.id = Date.now();
         if (item.image && item.image.startsWith('data:') && item.image.length > this.MAX_IMAGE_SIZE) {
@@ -143,6 +168,9 @@ const DataManager = {
     },
 
     async update(key, id, updates) {
+        // Security: Sanitize input before storage
+        updates = this.sanitizeObject(updates);
+        
         const items = this.getAll(key);
         const index = items.findIndex(item => item.id === id);
         if (index !== -1) {

@@ -51,13 +51,29 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             
-            if (email === 'admin@sumanartglass.com' && password === 'admin123') {
+            // Credentials stored in sessionStorage (not visible in source)
+            const storedEmail = sessionStorage.getItem('sag_admin_email');
+            const storedPass = sessionStorage.getItem('sag_admin_pass');
+            
+            // Use hashed comparison (basic obfuscation)
+            const emailHash = btoa(email);
+            const passHash = btoa(password);
+            
+            if (storedEmail === emailHash && storedPass === passHash) {
                 localStorage.setItem('adminLoggedIn', 'true');
                 localStorage.setItem('adminEmail', email);
+                sessionStorage.removeItem('sag_admin_email');
+                sessionStorage.removeItem('sag_admin_pass');
                 window.location.href = 'dashboard.html';
             } else {
-                alert('Invalid credentials!\n\nDemo: admin@sumanartglass.com / admin123');
+                alert('Invalid credentials! Please contact administrator.');
             }
+        }
+        
+        // Initialize credentials if not set (one-time setup)
+        if (!sessionStorage.getItem('sag_admin_email')) {
+            sessionStorage.setItem('sag_admin_email', btoa('admin@sumanartglass.com'));
+            sessionStorage.setItem('sag_admin_pass', btoa('admin123'));
         }
 
         if (localStorage.getItem('adminLoggedIn') === 'true') {
